@@ -22,7 +22,7 @@ def create_user(user: user.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud_user.create_user(db=db, user=user)
 
-@app.post("/users/auth", tags=["Users"])
+@app.post("/user/auth", tags=["Users"])
 def auth_user(email: str, password: str, db: Session = Depends(get_db)):
     return crud_user.auth_user(db, email=email, password=password)
 

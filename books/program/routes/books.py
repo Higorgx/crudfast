@@ -27,7 +27,7 @@ def read_book(book_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="book not found")
     return db_book
 
-@app.post("/books/{book_id}/book/", tags=["Books"], response_model=book.Book)
+@app.post("/books/{user_id}/book/", tags=["Books"], response_model=book.Book)
 def create_book_for_user(
     user_id: int, book: book.bookCreate, db: Session = Depends(get_db)
 ):

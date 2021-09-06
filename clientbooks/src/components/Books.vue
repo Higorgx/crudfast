@@ -23,57 +23,67 @@
         </button>
         <br/>
         <br/>
+          <select v-model="userLogged">
+            <option disabled value="">Escolha um usuário</option>
+            <option v-for="(user, id) in users" :key="id"
+            :label="user.username"
+            >{{user.id}}</option>
+          </select>
+          <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          @click="test()"
+        >
+          Deletar Usuário
+        </button>
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">Título</th>
+              <th scope="">Título</th>
               <th scope="col">Autor</th>
-              <th scope="col">Lido?</th>
-              <th></th>
+              <th scope="col">Descrição</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="(book, index) in books" :key="index">
-              <td>{{ book.title }}</td>
-              <td @click="getAutor(book.owner_id)">{{ book.owner_id }}</td>
-              <td>{{BookForm.username}}</td>
-              <td>
-                <span v-if="book.read">Sim</span>
-                <span v-else>Não</span>
-              </td>
-              <td>
-                <div class="btn-group" role="group">
-                  <button
-                    type="button"
-                    class="btn btn-warning btn-sm"
-                    v-b-modal.book-modal
-                    @click="editBook(book)"
-                  >
-                    Editar
+          <tbody v-for="(user, id) in users" :key="id">
+              <tr v-for="(book, index) in user.books" :key="index">
+                <td >{{ book.title }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ book.description }}</td>
+                <td>
+                </td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-sm"
+                      v-b-modal.book-modal
+                      @click="editBook(book)"
+                    >
+                      Editar
+                    </button>
+                    <b-button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      @click="onShowDelete(book.id)"
+                    >
+                      Remover
+                    </b-button>
+                  </div>
+                </td>
+              </tr>
+              <b-modal id="modal-del" hide-footer>
+                <template>
+                  Excluir Livro?
+                </template>
+                <div class="d-block text-center">
+                  <button type="button" class="btn btn-danger btn-lg" @click="onDeleteBook">
+                    Excluir
                   </button>
-                  <b-button
-                    type="button"
-                    class="btn btn-danger btn-sm"
-                    @click="onShowDelete(book.id)"
-                  >
-                    Remover
-                  </b-button>
                 </div>
-              </td>
-            </tr>
-            <b-modal id="modal-del" hide-footer>
-              <template>
-                Excluir Livro?
-              </template>
-              <div class="d-block text-center">
-                <button type="button" class="btn btn-danger btn-lg" @click="onDeleteBook">
-                  Excluir
-                </button>
-              </div>
-            </b-modal>
+              </b-modal>
           </tbody>
         </table>
-        <b-alert show="show" variant="danger" v-if="this.books.length === 0">
+        <b-alert show="show" variant="danger" v-if="this.users.length === 0">
           Você não possui livros adicionados.</b-alert
         >
       </div>
@@ -90,18 +100,26 @@
           >
           </b-form-input>
         </b-form-group>
-        <b-form-group id="form-author-edit-group" label="Autor:" label-for="form-author-edit-input">
+        <b-form-group id="form-author-edit-group"
+        label="descrição:"
+        label-for="form-author-edit-input"
+        >
           <b-form-input
             id="form-author-edit-input"
             type="text"
-            v-model="BookForm.author"
+            v-model="BookForm.description"
             required
-            placeholder="Insira o autor"
+            placeholder="Insira a descrição"
           >
           </b-form-input>
         </b-form-group>
         <b-form-group id="form-read-edit-group">
-          <b-form-checkbox v-model="BookForm.read" value="true">Lido?</b-form-checkbox>
+           <select v-model="userLogged">
+            <option disabled value="">Escolha um usuário</option>
+            <option v-for="(user, id) in users" :key="id"
+            :label="user.username"
+            >{{user.id}}</option>
+          </select>
         </b-form-group>
         <b-button-group>
           <b-button type="submit" variant="primary">{{ botao }}</b-button>
@@ -117,12 +135,13 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      books: [],
+      users: [],
+      userbooks: '',
+      userLogged: '',
       BookForm: {
         id: 'Null',
         title: '',
-        author: '',
-        read: false,
+        description: '',
       },
       message: '',
       bookId: '',
@@ -152,45 +171,54 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
-    getAutor(ownerId) {
-      const path = `http://127.0.0.1:8000/users/${ownerId}`;
+    test() {
+      this.userLogged = this.getUser(this.userLogged);
+    },
+    getUser(userId) {
+      const path = `http://127.0.0.1:8000/users/${userId}`;
       axios
         .get(path)
         .then((res) => {
-          this.BookForm = res.data;
-          console.log(this.BookForm);
+          this.userLogged = res.data;
+          this.userbooks = this.userLogged.books;
+          const index = this.userbooks.indexOf(this.userbooks.id);
+          console.log(this.userbooks);
+          if (index !== -1) {
+            console.log(this.userbooks.id);
+            this.removeBook(this.userbooks.id);
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
         });
     },
-    getBooks() {
-      const path = 'http://127.0.0.1:8000/books';
+    getUsers() {
+      const path = 'http://127.0.0.1:8000/users';
       axios
         .get(path)
         .then((res) => {
-          this.books = res.data;
-          console.log(this.books.owner_id);
+          this.users = res.data;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
         });
     },
-    addBook(payload) {
-      const path = 'http://localhost:5000/books';
+    addBook(payload, userLogged) {
+      console.log('add user id', userLogged);
+      const path = `http://localhost:8000/books/${userLogged}/book`;
       axios
         .post(path, payload)
         .then(() => {
-          this.getBooks();
+          this.getUsers();
           this.showAlert('Livro Adicionado!', 'info');
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
-          this.getBooks();
+          this.getUsers();
         });
     },
     updateBook(payload, bookID) {
@@ -198,14 +226,14 @@ export default {
       axios
         .put(path, payload)
         .then(() => {
-          this.getBooks();
+          this.getUsers();
           this.showAlert('Livro Atualizado!', 'primary');
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getBooks();
+          this.getUsers();
         });
     },
     initForm() {
@@ -217,19 +245,14 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       this.$refs.BookModal.hide();
-      let read = false;
-      if (this.BookForm.read) {
-        read = true;
-      }
       const payload = {
         title: this.BookForm.title,
-        author: this.BookForm.author,
-        read,
+        description: this.BookForm.description,
       };
       if (this.tituloModal === 'Adicionar Livro') {
-        this.addBook(payload);
+        this.addBook(payload, this.userLogged);
       } else {
-        this.updateBook(payload, this.BookForm.id);
+        this.updateBook(payload, this.userLogged);
       }
       this.initForm();
     },
@@ -238,39 +261,40 @@ export default {
       this.$refs.BookModal.hide();
       this.initForm();
     },
-    editBook(book) {
+    editBook(user) {
       this.tituloModal = 'Alterar';
       this.botao = 'Atualizar';
-      this.BookForm = book;
+      this.BookForm = user;
     },
     onResetUpdate(evt) {
       evt.preventDefault();
       this.$refs.BookModal.hide();
       this.initForm();
-      this.getBooks();
+      this.getUsers();
     },
     removeBook(bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+      const path = `http://localhost:8000/book/delete/${bookID}`;
       axios
         .delete(path)
         .then(() => {
-          this.getBooks();
+          this.getUsers();
           this.showAlert('Livro Removido!', 'danger');
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getBooks();
+          this.getUsers();
         });
     },
     onDeleteBook() {
       this.removeBook(this.bookId);
+      console.log(this.bookId);
       this.$bvModal.hide('modal-del');
     },
   },
   created() {
-    this.getBooks();
+    this.getUsers();
   },
 };
 </script>

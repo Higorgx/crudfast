@@ -17,7 +17,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 import config as my_config
-config.set_main_option('postgresql', my_config.DATABASE_URI)
+config.set_main_option('mariadb+mariadbconnector', my_config.DATABASE_URI)
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel

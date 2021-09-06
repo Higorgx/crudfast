@@ -1,8 +1,8 @@
-"""correction username
+"""mariadb db transfer from postgresql
 
-Revision ID: 2b9f84534f63
-Revises: 
-Create Date: 2021-09-05 23:03:02.542296
+Revision ID: a3ab54c05e0d
+Revises: d280d9ac4512
+Create Date: 2021-09-06 09:29:30.366295
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2b9f84534f63'
-down_revision = None
+revision = 'a3ab54c05e0d'
+down_revision = 'd280d9ac4512'
 branch_labels = None
 depends_on = None
 

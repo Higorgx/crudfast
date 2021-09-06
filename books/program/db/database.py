@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:root@localhost:5432/crudBooks"
+SQLALCHEMY_DATABASE_URL = "mariadb+mariadbconnector://root:root@localhost:3306/crudBooks"
 
 
 engine = create_engine(

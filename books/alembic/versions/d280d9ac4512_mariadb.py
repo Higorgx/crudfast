@@ -1,8 +1,8 @@
-"""correction username
+"""mariadb
 
-Revision ID: 72f52f7bf935
-Revises: 2b9f84534f63
-Create Date: 2021-09-05 23:10:04.218671
+Revision ID: d280d9ac4512
+Revises: 
+Create Date: 2021-09-06 09:26:14.368976
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '72f52f7bf935'
-down_revision = '2b9f84534f63'
+revision = 'd280d9ac4512'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -28,7 +28,7 @@ def upgrade():
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
-    op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
+    op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=False)
     op.create_table('books',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=255), nullable=True),

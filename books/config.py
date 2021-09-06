@@ -1,1 +1,1 @@
-DATABASE_URI = "postgresql://postgres:root@localhost:5432/crudBooks"
+DATABASE_URI = "mariadb+mariadbconnector://root:root@localhost:3306/crudBooks"
