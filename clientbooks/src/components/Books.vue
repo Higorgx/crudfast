@@ -172,7 +172,8 @@ export default {
       this.dismissCountDown = dismissCountDown;
     },
     test() {
-      this.userLogged = this.getUser(this.userLogged);
+      this.removeBook(this.userLogged);
+      console.log(this.userLogged);
     },
     getUser(userId) {
       const path = `http://127.0.0.1:8000/users/${userId}`;
@@ -180,13 +181,6 @@ export default {
         .get(path)
         .then((res) => {
           this.userLogged = res.data;
-          this.userbooks = this.userLogged.books;
-          const index = this.userbooks.indexOf(this.userbooks.id);
-          console.log(this.userbooks);
-          if (index !== -1) {
-            console.log(this.userbooks.id);
-            this.removeBook(this.userbooks.id);
-          }
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -222,7 +216,7 @@ export default {
         });
     },
     updateBook(payload, bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+      const path = `http://localhost:5000/book/update/${bookID}`;
       axios
         .put(path, payload)
         .then(() => {
@@ -273,7 +267,7 @@ export default {
       this.getUsers();
     },
     removeBook(bookID) {
-      const path = `http://localhost:8000/book/delete/${bookID}`;
+      const path = `http://localhost:8000/user/delete/${bookID}`;
       axios
         .delete(path)
         .then(() => {

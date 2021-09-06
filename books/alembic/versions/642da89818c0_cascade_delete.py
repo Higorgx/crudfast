@@ -1,8 +1,8 @@
-"""mariadb
+"""cascade delete
 
-Revision ID: d280d9ac4512
+Revision ID: 642da89818c0
 Revises: 
-Create Date: 2021-09-06 09:26:14.368976
+Create Date: 2021-09-06 13:50:31.274486
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd280d9ac4512'
+revision = '642da89818c0'
 down_revision = None
 branch_labels = None
 depends_on = None

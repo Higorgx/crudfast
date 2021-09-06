@@ -1,8 +1,8 @@
-"""mariadb db transfer from postgresql
+"""cascade delete
 
-Revision ID: a3ab54c05e0d
-Revises: d280d9ac4512
-Create Date: 2021-09-06 09:29:30.366295
+Revision ID: 08856ff255cf
+Revises: 642da89818c0
+Create Date: 2021-09-06 13:50:43.512716
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a3ab54c05e0d'
-down_revision = 'd280d9ac4512'
+revision = '08856ff255cf'
+down_revision = '642da89818c0'
 branch_labels = None
 depends_on = None
 

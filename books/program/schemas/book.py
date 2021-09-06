@@ -19,7 +19,8 @@ class Book(bookBase):
         orm_mode = True
         
 class BookUpdate(BaseModel):
-    email: Optional[str] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
 
 class status(BaseModel):
     message: Optional[str] = None

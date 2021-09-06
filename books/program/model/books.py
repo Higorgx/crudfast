@@ -6,7 +6,7 @@ from program.db.database import Base
 class Book(Base):
     __tablename__ = "books"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True,  index=True )
     title = Column(String(255), index=True)
     description = Column(String(255), index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
