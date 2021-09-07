@@ -1,4 +1,4 @@
-# Server-side FastAPI/Python app:
+	# Server-side FastAPI/Python app:
 
 ## Pre-Install
 ```sh
@@ -10,7 +10,7 @@ $ sudo apt install libmariadb3 libmariadb-dev
 ## Install
 ```sh
 $ pip3 install virtualenv
-$ python3.7 -m venv env
+$ python3.8 -m venv env
 ```
 
 ## Run

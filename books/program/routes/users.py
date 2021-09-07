@@ -49,7 +49,7 @@ def update_user(user_id: int, items: user.UserUpdate = Body(..., embed=True), db
 
 @app.delete("/user/delete/{user_id}", tags=["Users"], response_model=user.status)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
-    db_user = crud_user.get_user(db, id=user_id)
+    db_user = crud_user.get_user(user_id = user_id , db=db)
     if not db_user:
         raise HTTPException(status_code=400, detail="Couldn't delete the user!")
     db_user = crud_user.delete_user(db, user_id=user_id)

@@ -2,9 +2,6 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-10">
-        <h1>Livros</h1>
-        <hr />
-        <br />
         <b-alert
           :variant="variant"
           :show="dismissCountDown"
@@ -21,21 +18,8 @@
         >
           Adicionar Livro
         </button>
-        <br/>
-        <br/>
-          <select v-model="userLogged">
-            <option disabled value="">Escolha um usuário</option>
-            <option v-for="(user, id) in users" :key="id"
-            :label="user.username"
-            >{{user.id}}</option>
-          </select>
-          <button
-          type="button"
-          class="btn btn-danger btn-sm"
-          @click="test()"
-        >
-          Deletar Usuário
-        </button>
+        <br />
+        <br />
         <table class="table table-hover">
           <thead>
             <tr>
@@ -45,42 +29,41 @@
             </tr>
           </thead>
           <tbody v-for="(user, id) in users" :key="id">
-              <tr v-for="(book, index) in user.books" :key="index">
-                <td >{{ book.title }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ book.description }}</td>
-                <td>
-                </td>
-                <td>
-                  <div class="btn-group" role="group">
-                    <button
-                      type="button"
-                      class="btn btn-warning btn-sm"
-                      v-b-modal.book-modal
-                      @click="editBook(book)"
-                    >
-                      Editar
-                    </button>
-                    <b-button
-                      type="button"
-                      class="btn btn-danger btn-sm"
-                      @click="onShowDelete(book.id)"
-                    >
-                      Remover
-                    </b-button>
-                  </div>
-                </td>
-              </tr>
-              <b-modal id="modal-del" hide-footer>
-                <template>
-                  Excluir Livro?
-                </template>
-                <div class="d-block text-center">
-                  <button type="button" class="btn btn-danger btn-lg" @click="onDeleteBook">
-                    Excluir
+            <tr v-for="(book, index) in user.books" :key="index">
+              <td>{{ book.title }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ book.description }}</td>
+              <td></td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button
+                    type="button"
+                    class="btn btn-warning btn-sm"
+                    v-b-modal.book-modal
+                    @click="editBook(book)"
+                  >
+                    Editar
                   </button>
+                  <b-button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    @click="onShowDelete(book.id)"
+                  >
+                    Remover
+                  </b-button>
                 </div>
-              </b-modal>
+              </td>
+            </tr>
+            <b-modal id="modal-del" hide-footer>
+              <template>
+                Excluir Livro?
+              </template>
+              <div class="d-block text-center">
+                <button type="button" class="btn btn-danger btn-lg" @click="onDeleteBook">
+                  Excluir
+                </button>
+              </div>
+            </b-modal>
           </tbody>
         </table>
         <b-alert show="show" variant="danger" v-if="this.users.length === 0">
@@ -100,9 +83,10 @@
           >
           </b-form-input>
         </b-form-group>
-        <b-form-group id="form-author-edit-group"
-        label="descrição:"
-        label-for="form-author-edit-input"
+        <b-form-group
+          id="form-author-edit-group"
+          label="descrição:"
+          label-for="form-author-edit-input"
         >
           <b-form-input
             id="form-author-edit-input"
@@ -114,11 +98,11 @@
           </b-form-input>
         </b-form-group>
         <b-form-group id="form-read-edit-group">
-           <select v-model="userLogged">
+          <select v-model="userLogged">
             <option disabled value="">Escolha um usuário</option>
-            <option v-for="(user, id) in users" :key="id"
-            :label="user.username"
-            >{{user.id}}</option>
+            <option v-for="(user, id) in users" :key="id" :label="user.username">{{
+              user.id
+            }}</option>
           </select>
         </b-form-group>
         <b-button-group>
@@ -161,6 +145,7 @@ export default {
     onShowModalInsert() {
       this.tituloModal = 'Adicionar Livro';
       this.botao = 'Adicionar';
+      this.getUsers();
       this.initForm();
     },
     showAlert(message, variant) {
@@ -216,8 +201,9 @@ export default {
         });
     },
     updateBook(payload, bookID) {
-      const path = `http://localhost:5000/book/update/${bookID}`;
+      const path = `http://localhost:8000/book/update/${bookID}`;
       axios
+      // eslint-disable-next-line
         .put(path, payload)
         .then(() => {
           this.getUsers();
@@ -233,7 +219,6 @@ export default {
     initForm() {
       this.BookForm.title = '';
       this.BookForm.author = '';
-      this.BookForm.read = false;
       this.BookForm.id = '';
     },
     onSubmit(evt) {
@@ -244,6 +229,8 @@ export default {
         description: this.BookForm.description,
       };
       if (this.tituloModal === 'Adicionar Livro') {
+        this.BookForm.title = '';
+        this.BookForm.description = '';
         this.addBook(payload, this.userLogged);
       } else {
         this.updateBook(payload, this.userLogged);
@@ -258,6 +245,7 @@ export default {
     editBook(user) {
       this.tituloModal = 'Alterar';
       this.botao = 'Atualizar';
+      this.getUser();
       this.BookForm = user;
     },
     onResetUpdate(evt) {
@@ -267,7 +255,7 @@ export default {
       this.getUsers();
     },
     removeBook(bookID) {
-      const path = `http://localhost:8000/user/delete/${bookID}`;
+      const path = `http://localhost:8000/book/delete/${bookID}`;
       axios
         .delete(path)
         .then(() => {

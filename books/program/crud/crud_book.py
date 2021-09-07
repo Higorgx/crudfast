@@ -18,10 +18,17 @@ def create_user_book(db: Session, book: book.bookCreate, user_id: int):
     db.refresh(db_book)
     return db_book
 
-def update_book(db: Session, book: book.BookUpdate, book_id: int):
-    db_book = update(books.Book).where(books.Book.id == book_id).values(**book.dict(exclude_unset=True))
-    db.execute(db_book)
-    db.commit()
+def update_book(db: Session, request_body: book.BookUpdate, id: int):
+    book = get_book(db, id)
+    if book != None:
+        db_book_update = update(books.Book).where(books.Book.id == id).values(
+            title=request_body.title, description=request_body.description
+        )
+        print(db_book_update)
+        db.execute(db_book_update)
+        db.commit()
+        return True
+    return False
 
 def delete_book(db: Session, book_id: int):
     db_book = get_book(db=db, book_id=book_id)

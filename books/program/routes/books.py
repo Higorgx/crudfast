@@ -1,5 +1,7 @@
 from typing import List
 from fastapi import Depends, HTTPException, FastAPI, Body
+from pydantic.fields import Undefined
+from sqlalchemy.sql.expression import true
 from program.crud import crud_user, crud_book
 from program.schemas import book, user
 from sqlalchemy.orm import Session
@@ -32,14 +34,10 @@ def create_book_for_user(
     user_id: int, book: book.bookCreate, db: Session = Depends(get_db)
 ):
     return crud_book.create_user_book(db=db, book=book, user_id=user_id)
-
-@app.put("/book/update/{book_id}", tags=["Books"], response_model=book.BookUpdate)
-def update_book(book_id: int, book: book.BookUpdate, db: Session = Depends(get_db)):
-    db_book = crud_book.get_book(db, book_id=book_id)
-    if not db_book:
-        raise HTTPException(status_code=400, detail="book not found")
-    return crud_book.update_book(book_id=book_id, book = book, db=db)
     
+@app.put("/book/update/{book_id}", tags=["Books"])
+def update_book(book: book.BookUpdate, book_id: int, db: Session = Depends(get_db)):
+    return crud_book.update_book(db, book, book_id)
 
 @app.delete("/book/delete/{book_id}", tags=["Books"], response_model=book.status)
 def delete_book(book_id: int, db: Session = Depends(get_db)):
