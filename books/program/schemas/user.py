@@ -21,6 +21,7 @@ class User(UserBase):
 
 class UserUpdate(BaseModel):
     email: Optional[str] = None
+    username: Optional[str] = None
 
 class status(BaseModel):
     message: Optional[str] = None
