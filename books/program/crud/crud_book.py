@@ -19,6 +19,8 @@ def create_user_book(db: Session, book: book.bookCreate, user_id: int):
     return db_book
 
 def update_book(db: Session, request_body: book.BookUpdate, id: int):
+    book = db.query(books.Book).filter(books.Book.id == id).one_or_none()
+
     book = get_book(db, id)
     if book != None:
         db_book_update = update(books.Book).where(books.Book.id == id).values(

@@ -98,7 +98,13 @@
           </b-form-input>
         </b-form-group>
         <b-form-group id="form-read-edit-group">
-          <select v-model="userLogged">
+          <select v-if="tituloModal !== 'Alterar'" required="true" v-model="userLogged">
+            <option disabled value="">Escolha um usuário</option>
+            <option v-for="(user, id) in users" :key="id" :label="user.username">{{
+              user.id
+            }}</option>
+          </select>
+          <select v-if="tituloModal == 'Alterar'" required="true" v-model="BookForm.id">
             <option disabled value="">Escolha um usuário</option>
             <option v-for="(user, id) in users" :key="id" :label="user.username">{{
               user.id
@@ -145,6 +151,7 @@ export default {
     onShowModalInsert() {
       this.tituloModal = 'Adicionar Livro';
       this.botao = 'Adicionar';
+      this.BookForm.description = '';
       this.getUsers();
       this.initForm();
     },
@@ -158,7 +165,6 @@ export default {
     },
     test() {
       this.removeBook(this.userLogged);
-      console.log(this.userLogged);
     },
     getUser(userId) {
       const path = `http://127.0.0.1:8000/users/${userId}`;
@@ -200,8 +206,8 @@ export default {
           this.getUsers();
         });
     },
-    updateBook(payload, bookID) {
-      const path = `http://localhost:8000/book/update/${bookID}`;
+    updateBook(payload, BookFormId) {
+      const path = `http://localhost:8000/book/update/${BookFormId}`;
       axios
       // eslint-disable-next-line
         .put(path, payload)
@@ -233,7 +239,7 @@ export default {
         this.BookForm.description = '';
         this.addBook(payload, this.userLogged);
       } else {
-        this.updateBook(payload, this.userLogged);
+        this.updateBook(payload, this.BookForm.id);
       }
       this.initForm();
     },
@@ -245,7 +251,6 @@ export default {
     editBook(user) {
       this.tituloModal = 'Alterar';
       this.botao = 'Atualizar';
-      this.getUser();
       this.BookForm = user;
     },
     onResetUpdate(evt) {

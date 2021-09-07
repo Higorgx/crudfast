@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 class bookBase(BaseModel):
-    title: str
+    title: Optional[str] = None
     description: Optional[str] = None
 
 

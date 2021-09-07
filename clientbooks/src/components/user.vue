@@ -93,7 +93,6 @@ export default {
         .get(path)
         .then((res) => {
           this.users = res.data;
-          console.log(this.users);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -101,7 +100,6 @@ export default {
         });
     },
     adduser(payload) {
-      console.log('add user id', payload);
       const path = 'http://localhost:8000/users/';
       axios
         .post(path, payload)
