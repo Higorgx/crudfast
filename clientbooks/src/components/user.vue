@@ -14,8 +14,22 @@
         <option disabled value="">Escolha um usuário</option>
         <option v-for="(user, id) in users" :key="id" :label="user.username">{{ user.id }}</option>
       </select>
-      <button type="button" class="btn btn-danger btn-sm" @click="onDeleteuser(userLogged)">
+      <button
+        :disabled="userLogged == ''"
+        type="button"
+        class="btn btn-danger btn-sm"
+        @click="onDeleteuser(userLogged)"
+      >
         Deletar Usuário
+      </button>
+      <button
+        :disabled="userLogged == ''"
+        type="button"
+        class="btn btn-warning btn-sm"
+        v-b-modal.user-modal
+        @click="onShowModalupdate(userLogged)"
+      >
+        Editar Usuário
       </button>
     </div>
     <div>
@@ -46,7 +60,7 @@
             </b-form-input>
           </b-form-group>
           <b-button-group>
-            <b-button type="submit" variant="primary">Adicionar</b-button>
+            <b-button type="submit" variant="primary">{{ button }}</b-button>
             <b-button type="reset" variant="danger">Cancelar</b-button>
           </b-button-group>
         </b-form>
@@ -79,6 +93,11 @@ export default {
       this.getUsers();
       this.initForm();
     },
+    onShowModalupdate(userLogged) {
+      this.tituloModal = 'Editar Usuário';
+      this.button = 'Alterar';
+      this.users = this.getUser(userLogged);
+    },
     showAlert(message, variant) {
       this.dismissCountDown = 5;
       this.variant = variant;
@@ -93,6 +112,19 @@ export default {
         .get(path)
         .then((res) => {
           this.users = res.data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+    getUser(id) {
+      const path = `http://127.0.0.1:8000/users/${id}`;
+      axios
+        .get(path)
+        .then((res) => {
+          this.users = res.data;
+          return this.users;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -120,6 +152,22 @@ export default {
       this.userForm.email = '';
       this.userForm.password = '123';
       this.userForm.id = '';
+    },
+    updateuser(payload, userLogged) {
+      const path = `http://localhost:8000/user/update/${userLogged}`;
+      axios
+        .put(path, payload)
+        .then(() => {
+          this.getUsers();
+          this.showAlert('Livro Adicionado!', 'info');
+          this.showMessage = true;
+          this.getUsers();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          this.getUsers();
+        });
     },
     onSubmit(evt) {
       evt.preventDefault();

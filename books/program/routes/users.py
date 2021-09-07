@@ -40,11 +40,11 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 @app.put("/user/update/{user_id}", tags=["Users"], response_model=user.status)
-def update_user(user_id: int, items: user.UserUpdate = Body(..., embed=True), db: Session = Depends(get_db)):
+def update_user(user_id: int, users: user.UserUpdate, db: Session = Depends(get_db)):
     db_user = crud_user.get_user(db, user_id=user_id)
     if not db_user:
         raise HTTPException(status_code=400, detail="User not found")
-    crud_user.update_user(user_id=user_id, user=items, db=db)
+    crud_user.update_user(user_id=user_id, user=users, db=db)
     return user.status(message="User updated successfully")
 
 @app.delete("/user/delete/{user_id}", tags=["Users"], response_model=user.status)
