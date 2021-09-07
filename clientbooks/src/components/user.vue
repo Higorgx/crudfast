@@ -10,12 +10,17 @@
         Adicionar Usuário
       </button>
       <hr />
-      <select v-model="userLogged">
-        <option disabled value="">Escolha um usuário</option>
+      <select v-if="tituloModal !== 'Alterar'" required="true" v-model="userLogged">
+        <option disabled value="">Escolha um usuário para excluir</option>
         <option v-for="(user, id) in users" :key="id" :label="user.username">{{ user.id }}</option>
       </select>
-      <button type="button" class="btn btn-danger btn-sm" @click="onDeleteuser(userLogged)">
-        Deletar Usuário
+      <button
+        type="button"
+        :disabled="userLogged == ''"
+        class="btn btn-danger btn-sm"
+        @click="onDeleteuser(userLogged)"
+      >
+        Deletar
       </button>
     </div>
     <div>
@@ -104,6 +109,7 @@ export default {
       axios
         .post(path, payload)
         .then(() => {
+          this.$emit('onDeleteuser');
           this.getUsers();
           this.showAlert('Livro Adicionado!', 'info');
           this.showMessage = true;

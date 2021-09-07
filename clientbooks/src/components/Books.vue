@@ -85,7 +85,7 @@
         </b-form-group>
         <b-form-group
           id="form-author-edit-group"
-          label="descrição:"
+          label="Descrição:"
           label-for="form-author-edit-input"
         >
           <b-form-input
@@ -191,7 +191,6 @@ export default {
         });
     },
     addBook(payload, userLogged) {
-      console.log('add user id', userLogged);
       const path = `http://localhost:8000/books/${userLogged}/book`;
       axios
         .post(path, payload)
@@ -209,7 +208,7 @@ export default {
     updateBook(payload, BookFormId) {
       const path = `http://localhost:8000/book/update/${BookFormId}`;
       axios
-      // eslint-disable-next-line
+        // eslint-disable-next-line
         .put(path, payload)
         .then(() => {
           this.getUsers();
@@ -276,7 +275,6 @@ export default {
     },
     onDeleteBook() {
       this.removeBook(this.bookId);
-      console.log(this.bookId);
       this.$bvModal.hide('modal-del');
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-alert variant="success" show>{{ message }}</b-alert>
-    <br>
+    <br />
   </div>
 </template>
 
