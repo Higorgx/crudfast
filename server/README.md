@@ -1,4 +1,4 @@
-	# Server-side FastAPI/Python app:
+# Server-side FastAPI/Python app:
 ### This project uses MariaDB database
 ### Remember to set-up your database irl on alembic.init and /server/program/db/database.py
 
