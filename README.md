@@ -5,5 +5,5 @@
 ### One README is inside the Client folder, the other is in the Server folder
 
 ### The client folder contains all the Front-end codes
-### The server folder contains all the Back-end codes# crudfast
+### The server folder contains all the Back-end codes
  
