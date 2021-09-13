@@ -20,6 +20,7 @@
         </button>
         <br />
         <br />
+        <h2>Listagem geral de livros</h2>
         <table class="table table-hover">
           <thead>
             <tr>
